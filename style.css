@@ -3,7 +3,6 @@ html: {
 }
 
 body {
-    position: relative;
     height: 100vh;
     width: 100vw;
     margin: 0;
@@ -15,22 +14,26 @@ body {
 
     background-color: #16141d;
     color: #e9e9e9;
+    touch-action: none;
 }
 
 #pov {
     margin: 0;
 }
 
-#minimap {
+#minimap, #git {
   position: fixed;
-  right: 1.5rem;
-  top: 1.5rem;
   z-index: 10;
   opacity: .75;
 }
 
-@media (max-width: 1250px) {
-  body {
-    flex-direction: column;
-  }
+#minimap {
+  right: 1.5rem;
+  top: 1.5rem;
+}
+
+#git {
+  color: #cecefe;
+  right: 1.5rem;
+  bottom: 1.5rem;
 }

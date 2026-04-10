@@ -84,7 +84,7 @@ function drawRay3D (ctx, i, ray, rayAngle, rayCount) {
     const lineHeight = Math.min(maxHeight / distance, maxHeight);
 
     // Escurece linhas mais distantes
-    const shade = Math.max(0, 255 - distance * 25);
+    const shade = Math.max(colors.farthestWall, 255 - distance * 25);
     ctx.fillStyle = `rgb(${shade}, ${shade}, ${shade+25})`;
     ctx.fillRect(
         i * increment,

@@ -25,13 +25,11 @@ export function updatePlayer(map) {
   if (keys["w"] || keys["ArrowUp"]) {
     moveX += Math.cos(player.angle) * moveSpeed;
     moveY += Math.sin(player.angle) * moveSpeed;
-    console.log(player);
   }
 
   if (keys["s"] || keys["ArrowDown"]) {
     moveX -= Math.cos(player.angle) * moveSpeed;
     moveY -= Math.sin(player.angle) * moveSpeed;
-    console.log(player);
   }
 
   const newX = player.x + moveX;
