@@ -12,7 +12,7 @@ window.addEventListener("keyup", e => keys[e.key] = false);
 
 export function updatePlayer(map) {
   const moveSpeed = 0.03;
-  const rotationSpeed = 0.03;
+  const rotationSpeed = 0.02;
 
   // Rotação
   if (keys["a"] || keys["ArrowLeft"]) player.angle -= rotationSpeed;

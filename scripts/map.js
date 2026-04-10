@@ -21,7 +21,7 @@ export let tileSize = 48;
 
 // Recebe o contexto de um canvas para desenhar o minimapa
 export function drawMinimap (ctx) {
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    clearCanvas(ctx);
     // Calcula tamanho dos tiles baseado no tamanho do canvas
     tileSize = ctx.canvas.height / map.length;
 
@@ -44,31 +44,67 @@ export function drawMinimap (ctx) {
     }
 }
 
+// Desenha o circulo que representa o jogador
 export function drawPlayer (ctx) {
     const px = (player.x * tileSize);
     const py = (player.y * tileSize);
 
-    // Desenha o circulo que representa o jogador
-    ctx.fillStyle = "yellow";
+    ctx.fillStyle = "#c2fc03";
     ctx.beginPath();
     ctx.arc(px, py, 3, 0, Math.PI * 2);
     ctx.fill();
 }
 
-export function drawRays (ctx) {
+// Traça os raios que compõem o campo de visão do jogador
+export function drawRays (ctx2d, ctx3d) {
+    clearCanvas(ctx3d);
     const px = (player.x * tileSize);
     const py = (player.y * tileSize);
-    const rayAngle = player.angle;
-    
-    const ray = castRay(player.x, player.y, rayAngle);
+    const fov = Math.PI / 3;
+    const rayCount = 120;
 
-    // Desenha o raio
-    ctx.strokeStyle = "yellow";
+    // Dentro do campo de visão (60°) são traçados 60 raios
+    for (let i = 0; i < rayCount; i++) {
+        const angle = player.angle - (fov / 2) + (i / (rayCount)) * fov * fov;
+
+        const ray = castRay(player.x, player.y, angle);
+        drawRay2D(ctx2d, px, py, ray, angle);
+        drawRay3D(ctx3d, i, ray, angle, rayCount);
+    }
+    
+}
+
+// Desenha um raio no minimapa
+function drawRay2D (ctx, px, py, ray, angle) {
+    ctx.strokeStyle = "#c2fc0344";
     ctx.beginPath();
     ctx.moveTo(px, py);
     ctx.lineTo(
-        px + Math.cos(rayAngle) * (ray.distance * tileSize),
-        py + Math.sin(rayAngle) * (ray.distance * tileSize)
+        px + Math.cos(angle) * (ray.distance * tileSize),
+        py + Math.sin(angle) * (ray.distance * tileSize)
     );
     ctx.stroke();
+}
+
+// Desenha um raio na visão 3D
+function drawRay3D (ctx, i, ray, rayAngle, rayCount) {
+    // Corrige a distância para evitar distorção (olho de peixe)
+    const distance = ray.distance * Math.cos(rayAngle - player.angle);
+    const increment = ctx.canvas.width / rayCount;
+    const maxHeight = ctx.canvas.height;
+    const lineHeight = Math.min(maxHeight / distance, maxHeight);
+
+    // Escurece linhas mais distantes
+    const shade = Math.max(0, 255 - distance * 20);
+    ctx.fillStyle = `rgb(${shade}, ${shade}, ${shade})`;
+    ctx.fillRect(
+        i * increment,
+        (maxHeight / 2) - (lineHeight / 2),
+        increment,
+        lineHeight
+    );
+}
+
+function clearCanvas (ctx) {
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 }
