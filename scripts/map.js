@@ -1,4 +1,5 @@
 import { player } from "./player.js";
+import { castRay } from './raycaster.js';
 
 const mapString = `
 1,1,1,1,1,1,1,1,1,1
@@ -16,15 +17,13 @@ const mapString = `
 // Separa a string acima em uma matriz de inteiros
 export const map = mapString.trim().split("\n").map(row => row.split(",").map(Number));
 
-let tileHeight = 48;
-let tileWidth = 48;
+export let tileSize = 48;
 
 // Recebe o contexto de um canvas para desenhar o minimapa
 export function drawMinimap (ctx) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     // Calcula tamanho dos tiles baseado no tamanho do canvas
-    tileHeight = ctx.canvas.height / map.length;
-    tileWidth = ctx.canvas.width / map[0].length;
+    tileSize = ctx.canvas.height / map.length;
 
     // Preenche cada tile de acordo com a matriz
     for (let y = 0; y < map.length; y++) {
@@ -36,37 +35,40 @@ export function drawMinimap (ctx) {
             }
 
             ctx.fillRect(
-                x * tileWidth,
-                y * tileHeight,
-                tileWidth,
-                tileHeight
+                x * tileSize,
+                y * tileSize,
+                tileSize - 1,
+                tileSize - 1
             );
         }
     }
 }
 
 export function drawPlayer (ctx) {
-    const px = (player.x * tileWidth);
-    const py = (player.y * tileHeight);
+    const px = (player.x * tileSize);
+    const py = (player.y * tileSize);
 
     // Desenha o circulo que representa o jogador
     ctx.fillStyle = "yellow";
     ctx.beginPath();
     ctx.arc(px, py, 3, 0, Math.PI * 2);
     ctx.fill();
+}
 
-    // Desenha os raycasts (provisório)
-    const rayMargin = .75;
-    const rayIncrement = .25;
+export function drawRays (ctx) {
+    const px = (player.x * tileSize);
+    const py = (player.y * tileSize);
+    const rayAngle = player.angle;
     
-    for (let i = player.angle - rayMargin; i <= player.angle + rayMargin; i+=rayIncrement) {
-        ctx.strokeStyle = "yellow";
-        ctx.beginPath();
-        ctx.moveTo(px, py);
-        ctx.lineTo(
-            px + Math.cos(i) * 50,
-            py + Math.sin(i) * 50
-        );
-        ctx.stroke();
-    }
+    const ray = castRay(player.x, player.y, rayAngle);
+
+    // Desenha o raio
+    ctx.strokeStyle = "yellow";
+    ctx.beginPath();
+    ctx.moveTo(px, py);
+    ctx.lineTo(
+        px + Math.cos(rayAngle) * (ray.distance * tileSize),
+        py + Math.sin(rayAngle) * (ray.distance * tileSize)
+    );
+    ctx.stroke();
 }

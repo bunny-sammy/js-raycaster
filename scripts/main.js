@@ -1,4 +1,4 @@
-import { map, drawMinimap, drawPlayer } from "./map.js";
+import { map, drawMinimap, drawPlayer, drawRays } from "./map.js";
 import { updatePlayer } from "./player.js";
 
 const minimapCanvas = document.getElementById("minimap");
@@ -8,6 +8,7 @@ function gameLoop () {
     updatePlayer(map);
 
     drawMinimap(minimapCtx);
+    drawRays(minimapCtx);
     drawPlayer(minimapCtx);
 
     requestAnimationFrame(gameLoop)

@@ -18,7 +18,6 @@ export function updatePlayer(map) {
   if (keys["a"] || keys["ArrowLeft"]) player.angle -= rotationSpeed;
   if (keys["d"] || keys["ArrowRight"]) player.angle += rotationSpeed;
 
-
   // Movimento (frente e trás)
   let moveX = 0;
   let moveY = 0;
