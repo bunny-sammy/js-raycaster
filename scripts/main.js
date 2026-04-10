@@ -1,3 +1,16 @@
-import { map } from "./map.js";
+import { map, drawMinimap, drawPlayer } from "./map.js";
+import { updatePlayer } from "./player.js";
 
-console.log(map);
+const minimapCanvas = document.getElementById("minimap");
+const minimapCtx = minimapCanvas.getContext("2d");
+
+function gameLoop () {
+    updatePlayer(map);
+
+    drawMinimap(minimapCtx);
+    drawPlayer(minimapCtx);
+
+    requestAnimationFrame(gameLoop)
+}
+
+gameLoop();
