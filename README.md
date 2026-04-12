@@ -8,6 +8,15 @@ O funcionamento por trás dos panos é relativamente simples. O mapa é uma matr
 
 Foi bem divertido fazer isso funcionar e foi uma ótima oportunidade pra aprender a usar canvas. De quebra também foi a primeira vez que apliquei seno e coseno na vida real!
 
+## Comandos
+Teclado:
+- W / S ou ↑ / ↓: Mover
+- A / D ou ← / →: Virar
+
+Toque:
+- Tocar no meio: Mover
+- Tocar nas extremidades: Virar
+
 ## Links
 - [Demonstração](https://bunny-sammy.github.io/js-raycaster)
 - [Tutorial que me ajudou muito](https://www.youtube.com/watch?v=gYRrGTC7GtA)
